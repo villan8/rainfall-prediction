@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rain Prediction </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <style>
+        .back {
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .white {
+            color: white;
+        }
+        
+        .nspace {
+            margin: 15px 15px 30px 30px;
+            padding: 9px 10px;
+            background: palegreen;
+            width: 500px
+        }
+        
+        .space {
+            margin: 10px 30px;
+            padding: 10px 10px;
+            background: palegreen;
+            width: 500px
+        }
+        
+        .gap {
+            padding: 10px 20px;
+        }
+        
+        #myVideo {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+        }
+        
+        .content {
+            position: relative;
+            bottom: 0;
+            color: #f1f1f1;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .jumbotrn {
+            padding-bottom: 3%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <video autoplay muted loop id="myVideo">
+  <source src="{{ url_for('static', filename='V010_01.mp4')}}" type="video/mp4">
+</video>
+    <div class="content">
+        <div class="jumbotrn">
+            <h1 style="text-align:center">RAINFALL PREDICTION</h1>
+
+        </div>
+        <div class="back">
+            <!-- Main Input For Receiving Query to our ML -->
+            <form class="form-group" action="/predict" method="post">
+
+                <div class="row">
+                    <div class="gap col-md-6 ">
+
+                        <label class="white" for="">LOCATION</label>
+                        <select class="nspace form-control" name="LOCATION" id="LOCATION">
+  <option value=0>ALICE SPRINGS</option>
+  <option value=1>BRISBANE</option>
+  <option value=2>CAIRNS</option>
+  <option value=3>CANBERRA</option>
+  <option value=4>COBAR</option>
+  <option value=5>COFFS-HARBOUR</option>
+  <option value=6>DARWIN</option>
+  <option value=7>HOBART</option>
+  <option value=8>MELBOURNE</option>
+  <option value=9>MELBOURNE AIRPORT</option>
+  <option value=10>MILDURA</option>
+  <option value=11>MOREE</option>
+  <option value=12>MOUNT GAMBIER</option>
+  <option value=13>NOR-FOLK ISLAND</option>
+  <option value=14>NURIOOTPA</option>
+  <option value=15>PERTH</option>
+  <option value=16>PERTH AIRPORT</option>
+  <option value=17>PORTLAND</option>
+  <option value=18>SALE</option>
+  <option value=19>SYDNEY</option>
+  <option value=20>SYDNEY AIRPORT</option>
+  <option value=21>TOWNSVILLE</option>
+  <option value=22>WAGGA-WAGGA</option>
+  <option value=23>WATSONIA</option>
+  <option value=24>WILLIAM-TOWN</option>
+  <option value=25>WOOMERA</option>
+</select>
+
+
+                        <label class="white" for="">MINIMUM TEMPERATURE</label>
+                        <input type="number" class="space form-control" step="0.01" name="MINIMUM TEMPERATURE" placeholder="MINIMUM TEMPERATURE" required="required" /><br>
+
+                        <label class="white" for="">MAXIMUM TEMPERATURE</label>
+                        <input type="number" class="space form-control" step="0.01" name="MAXIMUM TEMPERATURE" placeholder="MAXIMUM TEMPERATURE" required="required" /><br>
+
+                        <label class="white" for="">RAIN-FALL</label>
+                        <input type="number" class="space form-control" step="0.01" name="RAIN-FALL" placeholder="RAIN-FALL" required="required" /><br>
+
+                        <label class="white" for="">EVAPORATION</label>
+                        <input type="number" class="space form-control" step="0.01" name="EVAPORATION" placeholder="EVAPORATION" required="required" /><br>
+
+                        <label class="white" for="">SUNSHINE</label>
+                        <input type="number" class="space form-control" step="0.01" name="SUNSHINE" placeholder="SUNSHINE" required="required" /><br>
+
+                        <label class="white" for="">WIND-GUST-DIRECTION</label>
+                        <select class="nspace form-control" name="WIND-GUST-DIRECTION" id="WIND-GUST-DIRECTION">
+  <option value=0>E</option>
+  <option value=1>ENE</option>
+  <option value=2>ESE</option>
+  <option value=3>N</option>
+  <option value=4>NE</option>
+  <option value=5>NNE</option>
+  <option value=6>NNW</option>
+  <option value=7>NW</option>
+  <option value=8>S</option>
+  <option value=9>SE</option>
+  <option value=10>SSE</option>
+  <option value=11>SSW</option>
+  <option value=12>SW</option>
+  <option value=13>W</option>
+  <option value=14>WNW</option>
+  <option value=15>WSW</option>
+</select>
+
+                        <label class="white" for="">WIND-GUST SPEED</label>
+                        <input type="number" class="space form-control" step="0.01" name="WIND-GUST SPEED" placeholder="WIND-GUST SPEED" required="required" /><br>
+
+
+                        <label class="white" for="">WIND-DIRECTION 9A.M</label>
+                        <select class="nspace form-control" name="WIND-DIRECTION 9A.M" id="WIND-DIRECTION 9A.M">
+  <option value=0>E</option>
+  <option value=1>ENE</option>
+ <option value=2>ESE</option>
+ <option value=3>N</option>
+ <option value=4>NE</option>
+  <option value=5>NNE</option>
+  <option value=6>NNW</option>
+ <option value=7>NW</option>
+ <option value=8>S</option>
+ <option value=9>SE</option>
+  <option value=10>SSE</option>
+  <option value=11>SSW</option>
+ <option value=12>SW</option>
+ <option value=13>W</option>
+ <option value=14>WNW</option>
+ <option value=15>WSW</option>
+</select>
+
+                        <label class="white" for="">WIND-DIRECTION 3P.M</label>
+                        <select class="nspace form-control" name="WIND-DIRECTION 3P.M" id="WIND-DIRECTION 3P.M">
+  <option value=0>E</option>
+  <option value=1>ENE</option>
+ <option value=2>ESE</option>
+ <option value=3>N</option>
+ <option value=4>NE</option>
+  <option value=5>NNE</option>
+  <option value=6>NNW</option>
+ <option value=7>NW</option>
+ <option value=8>S</option>
+ <option value=9>SE</option>
+  <option value=10>SSE</option>
+  <option value=11>SSW</option>
+ <option value=12>SW</option>
+ <option value=13>W</option>
+ <option value=14>WNW</option>
+ <option value=15>WSW</option>
+</select>
+
+                        <label class="white" for="">WIND SPEED 9A.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="WIND SPEED 9A.M" placeholder="WIND SPEED 9A.M" required="required" /><br>
+
+                    </div>
+
+                    <div class="gap col-md-6">
+
+                        <label class="white" for="">WIND SPEED 3P.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="WIND SPEED 3P.M" placeholder="WIND SPEED 3P.M" required="required" /><br>
+
+                        <label class="white" for="">HUMIDITY 9A.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="HUMIDITY 9A.M" placeholder="HUMIDITY 9A.M" required="required" /><br>
+
+                        <label class="white" for="">HUMIDITY 3P.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="HUMIDITY 3P.M" placeholder="HUMIDITY 3P.M" required="required" /><br>
+
+                        <label class="white" for="">PRESSURE 9A.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="PRESSURE 9A.M" placeholder="PRESSURE 9A.M" required="required" /><br>
+
+                        <label class="white" for="">PRESSURE 3P.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="PRESSURE 3P.M" placeholder="PRESSURE 3P.M" required="required" /><br>
+
+                        <label class="white" for="">CLOUD 9A.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="CLOUD 9A.M" placeholder="HUMIDITY 9A.M" required="required" /><br>
+
+                        <label class="white" for="">CLOUD 3P.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="CLOUD 3P.M" placeholder="CLOUD 3P.M" required="required" /><br>
+
+                        <label class="white" for="">TEMPERATURE 9A.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="TEMPERATURE 9A.M" placeholder="TEMPERATURE 9A.M" required="required" /><br>
+
+                        <label class="white" for="">TEMPERATURE 3P.M</label>
+                        <input type="number" class="space form-control" step="0.01" name="TEMPERATURE 3P.M" placeholder="TEMPERATURE 3P.M" required="required" /><br>
+
+
+                        <label class="white" for="">RAIN TODAY</label>
+                        <select style="margin-bottom: 65px;" class="nspace form-control" name="RAIN TODAY" id="RAIN TODAY">
+  <option value=0>NO</option>
+  <option value=1>YES</option></select>
+                        <label class="white" for="">RISK_MM</label>
+                        <input type="number" class="space form-control" step="0.01" name="RISK_MM" placeholder="RISK_MM" required="required" /><br>
+
+                    </div>
+                </div>
+
+                <div style="padding:2% 35%">
+                    <button type="submit" class="btn btn-success btn-block" style="width:350px;padding:20px">Predict</button>
+                </div>
+
+            </form>
+        </div>
+        <br>
+        <br>
+
+        <div style="background:skyblue;padding:2% 40%">
+            {{ prediction_text }}
+        </div>
+    </div>
+
+
+</body>
+
+</html>
